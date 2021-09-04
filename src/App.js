@@ -1,25 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Header from "./components/Header";
+import Formular from "./components/Formular";
+import Summary from "./components/Summary";
+import Result from "./components/Result";
+import Spinner from "./components/Spinner";
+import styled from "@emotion/styled";
+
+const Container = styled.div`
+    max-width: 600px;
+    margin: 0 auto;
+`;
+
+const FormularContainer = styled.div`
+    background-color: #fff;
+    padding: 3rem;
+`;
+
+const SpinnerContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+`;
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [summary, addSummary] = useState({
+        total: 0,
+        data: {
+            brand: "",
+            year: "",
+            plan: "",
+        },
+    });
+
+    const [loading, changeLoading] = useState(false);
+
+    return (
+        <Container>
+            <Header title="Insurance calculator" />
+            <FormularContainer>
+                <Formular
+                    addSummary={addSummary}
+                    changeLoading={changeLoading}
+                />
+                {!loading ? <Summary summary={summary} /> : null}
+                {loading ? (
+                    <SpinnerContainer>
+                        <Spinner />
+                    </SpinnerContainer>
+                ) : null}
+                <Result summary={summary} />
+            </FormularContainer>
+        </Container>
+    );
 }
 
 export default App;
